@@ -44,7 +44,7 @@ def generate_lookup_feature(t, input_data, feature_list):
                         feature_list}
 
     for name, data_list in channel_offset_data.items():
-        encoder = BILUOEncoderDecoder(name)
+        encoder = BILUOEncoderDecoder(None)
 
         tag_seq_list = []
 
@@ -66,5 +66,5 @@ if __name__ == "__main__":
             'person': ['../data/Chinese_Names_Corpus（120W）.txt']
         }
     )
-    result = generate_lookup_feature(t, '李白在和白居易喝酒呢！')
+    result = generate_lookup_feature(t, '李白在和白居易喝酒呢！', ['ancient_person', 'person'])
     print(result)
