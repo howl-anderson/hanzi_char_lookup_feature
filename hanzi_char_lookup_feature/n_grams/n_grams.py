@@ -12,3 +12,12 @@ if __name__ == "__main__":
 
     data = find_ngrams(input_list, 3)
     print(data)
+
+    expected = [
+        ('all', 'this', 'happened'),
+        ('this', 'happened', 'more'),
+        ('happened', 'more', 'or'),
+        ('more', 'or', 'less')
+    ]
+
+    # data should equal to expected

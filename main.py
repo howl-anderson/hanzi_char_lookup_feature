@@ -8,7 +8,7 @@ t = pygtrie.CharTrie()
 
 # input_files = pathlib.Path('./data').glob('*.txt')
 
-input_files = [pathlib.Path('./data/Ancient_Names_Corpus（25W）.txt')]
+input_files = [pathlib.Path('./data/sample.txt')]
 
 for input_file in input_files:
     with input_file.open('rt') as fd:

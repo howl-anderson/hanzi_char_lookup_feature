@@ -17,7 +17,10 @@ text = "李白和白居易在南京西路喝酒。"
 #     ['南京中路', '北京西路']
 # ]
 
-dictionary = load_from_text('data/THUOCL_lishimingren.txt')
+current_dir = os.path.dirname(__file__)
+sample_file = os.path.join(current_dir, '../../data/sample.txt')
+
+dictionary = load_from_text(sample_file)
 
 
 trie = []

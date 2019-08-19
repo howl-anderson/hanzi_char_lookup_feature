@@ -143,6 +143,8 @@ def generate_lookup_feature(text, ngrams, mapping, used_feature, output_type_fun
 
 
 if __name__ == "__main__":
+    import os
+
     text = "李白和白居易在南京西路喝酒。"
 
     # dictionary = [
@@ -153,13 +155,16 @@ if __name__ == "__main__":
     #     ['南京中路', '北京西路']
     # ]
 
-    dictionary = load_flatten_set_from_text('../../data/THUOCL_lishimingren.txt')
+    current_dir = os.path.dirname(__file__)
+    sample_data = os.path.join(current_dir, '../../data/sample.txt')
+
+    dictionary = load_flatten_set_from_text(sample_data)
 
     result = ngrams_feature(text, 4, dictionary, dropout_rate=0.5)
     print(result)
 
-    result = ngrams_feature_mapping(text, 4, {'person': ['../../data/THUOCL_lishimingren.txt']})
+    result = ngrams_feature_mapping(text, 4, {'person': [sample_data]})
     print(result)
 
-    result = generate_lookup_feature(text, 4, {'person': ['../../data/THUOCL_lishimingren.txt']}, ['person'])
+    result = generate_lookup_feature(text, 4, {'person': [sample_data]}, ['person'])
     print(result)
