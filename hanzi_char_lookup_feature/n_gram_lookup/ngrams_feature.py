@@ -42,18 +42,18 @@ def ngrams_structure_feature_using_set(text, ngrams, dict_, output_type_func=int
     all_ngrams = [''.join(i) for i in find_all_ngrams(text, ngrams)]
     found_ner_list = [i for i in all_ngrams if i in dict_]
 
+    # apply dropout
     need_to_remove = []
     for i in found_ner_list:
         keep_it = np.random.uniform() > dropout_rate
         if not keep_it:
             need_to_remove.append(i)
-
     dropout_dict = set(dict_) - set(need_to_remove)
 
     feature = []
-    for ngrams_group in find_ngrams(text, ngrams):
+    for ngrams_of_a_word in find_ngrams(text, ngrams):
         raw_encoding = []
-        for index, ngrams in enumerate(ngrams_group):
+        for index, ngrams in enumerate(ngrams_of_a_word):
             # raw_encoding.append(
             #     [''.join(i) in dict_ if i is not None else False for
             #      i in ngrams]

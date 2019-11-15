@@ -27,10 +27,10 @@ def find_ngrams_at_offset(data, offset, n):
     char_n_gram = []
     for j in range(2, n + 1):  # range from 2 (included) to n (included)
         left_index = offset - j + 1  # + 1 for n-grams include current char too
-        left_span = data[left_index: offset + 1] if left_index >= 0 else None
+        left_span = data[left_index : offset + 1] if left_index >= 0 else None
 
         right_index = offset + j
-        right_span = data[offset: right_index] if right_index <= len(data) else None
+        right_span = data[offset:right_index] if right_index <= len(data) else None
 
         char_n_gram.append((left_span, right_span))
 
@@ -38,7 +38,36 @@ def find_ngrams_at_offset(data, offset, n):
 
 
 if __name__ == "__main__":
-    input_list = ['all', 'this', 'happened', 'more', 'or', 'less']
+    input_list = ["all", "this", "happened", "more", "or", "less"]
 
     data = list(find_ngrams(input_list, 3))
-    print(data)
+
+    expected_data = [
+        [  # #1 word
+            # left, right
+            (None, ["all", "this"]),  # 2-gram
+            (None, ["all", "this", "happened"])  # 3-gram
+        ],
+        [  # #2 word
+            # left          , right
+            (["all", "this"], ["this", "happened"]),  # 2-gram
+            (None, ["this", "happened", "more"])  # 3-gram
+        ],
+        [  # #3 word
+            # left               , right
+            (["this", "happened"], ["happened", "more"]),  # 2-gram
+            (["all", "this", "happened"], ["happened", "more", "or"]),  # 3-gram
+        ],
+        [  # #4 word
+            (["happened", "more"], ["more", "or"]),
+            (["this", "happened", "more"], ["more", "or", "less"]),
+        ],
+        [  # #5 word
+            (["more", "or"], ["or", "less"]),
+            (["happened", "more", "or"], None)
+        ],
+        [  # #6 word
+            (["or", "less"], None),
+            (["more", "or", "less"], None)
+        ],
+    ]
