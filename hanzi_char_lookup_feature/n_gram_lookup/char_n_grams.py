@@ -1,4 +1,6 @@
 # copied from http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/
+from typing import List
+
 from hanzi_char_lookup_feature.context_gram_feature import Feature, GramFeature, TokenGramFeature, create_feature, \
     ContextGramFeature
 
@@ -10,7 +12,7 @@ def find_ngrams(input_list, n):
         yield char_n_gram
 
 
-def find_ngrams_v2(input_list: str, n_gram: int) -> ContextGramFeature:
+def find_ngrams_v2(input_list: List[str], n_gram: int) -> ContextGramFeature:
     token_feature_list = []
     for token_index in range(len(input_list)):
         char_n_gram = find_ngrams_at_offset_v2(input_list, token_index, n_gram)
@@ -49,7 +51,7 @@ def find_ngrams_at_offset(data, offset, n):
     return char_n_gram
 
 
-def find_ngrams_at_offset_v2(data: str, offset: int, n: int):
+def find_ngrams_at_offset_v2(data: List[str], offset: int, n: int):
     token_gram_feature = TokenGramFeature(data[offset])
 
     for j in range(2, n + 1):  # range from 2 (included) to n (included)
@@ -69,8 +71,8 @@ def find_ngrams_at_offset_v2(data: str, offset: int, n: int):
 if __name__ == "__main__":
     input_list = ["all", "this", "happened", "more", "or", "less"]
 
-    data = find_ngrams(input_list, 3)
-    # data = find_ngrams_v2(input_list, 3)
+    # data = find_ngrams(input_list, 3)
+    data = find_ngrams_v2(input_list, 3)
 
     print("")
 
@@ -103,3 +105,5 @@ if __name__ == "__main__":
             (["more", "or", "less"], None)
         ],
     ]
+
+    assert data == expected_data

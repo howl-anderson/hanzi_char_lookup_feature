@@ -1,7 +1,9 @@
-# copied from http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/
+from typing import List
 
 
-def find_ngrams(input_list, n):
+def find_ngrams(input_list: List[str], n):
+    # copied from http://locallyoptimal.com/blog/2013/01/20/elegant-n-gram-generation-in-python/
+
     return list(
         zip(*[input_list[i:] for i in range(n)])
     )

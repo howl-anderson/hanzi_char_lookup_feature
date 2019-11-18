@@ -1,10 +1,11 @@
 import collections
+from typing import Dict
 
 import numpy as np
 
 from hanzi_char_lookup_feature.load_dictionary import load_flatten_set_from_files
 from hanzi_char_lookup_feature.load_dictionary import load_flatten_set_from_text
-from hanzi_char_lookup_feature.n_gram_lookup.char_n_grams import find_ngrams
+from hanzi_char_lookup_feature.n_gram_lookup.char_n_grams import find_ngrams, find_ngrams_v2
 from hanzi_char_lookup_feature.n_grams import find_all_ngrams
 
 
@@ -82,8 +83,46 @@ def ngrams_structure_feature_using_set(text, ngrams, dict_, output_type_func=int
     return feature
 
 
+def ngrams_structure_feature_using_set_v2(text: str, ngrams: int, dict_: list) -> np.ndarray:
+    dropout_dict = set(dict_)
+
+    feature = []
+    text_ngrams_feature = find_ngrams_v2([i for i in text], ngrams)
+    for word_gram_feature in text_ngrams_feature:
+        raw_encoding = []
+        for index, ngrams in word_gram_feature.n_gram_feature.items():
+            ngram_encoding = []
+            for i in ngrams.contexts:
+                code = None
+                if i is not None:
+                    code = ''.join(i) in dropout_dict
+                else:
+                    code = False
+                ngram_encoding.append(code)
+
+            raw_encoding.append(ngram_encoding)
+
+        feature.append(raw_encoding)
+
+    return np.asarray(feature, dtype=np.bool)
+
+
 def ngrams_feature(text, ngrams, dict_, output_type_func=int, dropout_rate=0):
     feature = ngrams_structure_feature_using_set(text, ngrams, dict_, output_type_func, dropout_rate)
+
+    flat_feature = []
+    for i in feature:
+        char_feature = []
+        for j in i:
+            char_feature.extend(j)
+
+        flat_feature.append(char_feature)
+
+    return flat_feature
+
+
+def ngrams_feature_v2(text, ngrams, dict_):
+    feature = ngrams_structure_feature_using_set_v2(text, ngrams, dict_)
 
     flat_feature = []
     for i in feature:
@@ -142,6 +181,17 @@ def generate_lookup_feature(text, ngrams, mapping, used_feature, output_type_fun
     return feature
 
 
+def generate_lookup_feature_v2(text, configure):
+    ndarray_list = []
+    for lookups, context_length in configure:
+        nd_array = ngrams_structure_feature_using_set_v2(text, context_length, lookups)
+        flatten_array = nd_array.reshape((len(text), -1))
+        ndarray_list.append(flatten_array)
+
+    stacked_feature = np.concatenate(ndarray_list, axis=-1)
+    return stacked_feature
+
+
 if __name__ == "__main__":
     import os
 
@@ -160,7 +210,9 @@ if __name__ == "__main__":
 
     dictionary = load_flatten_set_from_text(sample_data)
 
-    result = ngrams_feature(text, 4, dictionary, dropout_rate=0.5)
+    # result = ngrams_feature(text, 4, dictionary, dropout_rate=0.5)
+    # print(result)
+    result = ngrams_feature_v2(text, 4, dictionary)
     print(result)
 
     result = ngrams_feature_mapping(text, 4, {'person': [sample_data]})
