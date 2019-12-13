@@ -5,9 +5,9 @@ from hanzi_char_lookup_feature.n_gram_lookup.char_n_grams import find_ngrams_v2,
 def test_find_ngrams_v2():
     input_list = ["all", "this", "happened", "more", "or", "less"]
 
-    data = find_ngrams_v2(input_list, 3)
+    result = find_ngrams_v2(input_list, 3)
 
-    expected_data = ContextGramFeature([
+    expected = ContextGramFeature([
         TokenGramFeature(token="all", n_gram_feature={
             2: GramFeature(left_context=None, right_context=Feature(["all", "this"])),
             3: GramFeature(left_context=None, right_context=Feature(["all", "this", "happened"]))
@@ -34,15 +34,15 @@ def test_find_ngrams_v2():
         }),
     ])
 
-    assert data == expected_data
+    assert result == expected
 
 
 def test_find_ngrams():
     input_list = ["all", "this", "happened", "more", "or", "less"]
 
-    data = list(find_ngrams(input_list, 3))
+    result = list(find_ngrams(input_list, 3))
 
-    expected_data = [
+    expected = [
         [  # #1 word
             # left, right
             (None, ["all", "this"]),  # 2-gram
@@ -72,4 +72,4 @@ def test_find_ngrams():
         ],
     ]
 
-    assert data == expected_data
+    assert result == expected

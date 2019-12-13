@@ -1,5 +1,5 @@
 import collections
-from typing import Dict
+from typing import Dict, List, Tuple
 
 import numpy as np
 
@@ -181,10 +181,16 @@ def generate_lookup_feature(text, ngrams, mapping, used_feature, output_type_fun
     return feature
 
 
-def generate_lookup_feature_v2(text, configure):
+class LookupConfig:
+    def __init__(self, lookup_dict: List[str], n_gram: int):
+        self.lookup_dict = lookup_dict
+        self.n_gram = n_gram
+
+
+def generate_lookup_feature_v2(text: str, configures: List[LookupConfig]):
     ndarray_list = []
-    for lookups, context_length in configure:
-        nd_array = ngrams_structure_feature_using_set_v2(text, context_length, lookups)
+    for config in configures:
+        nd_array = ngrams_structure_feature_using_set_v2(text, config.n_gram, config.lookup_dict)
         flatten_array = nd_array.reshape((len(text), -1))
         ndarray_list.append(flatten_array)
 

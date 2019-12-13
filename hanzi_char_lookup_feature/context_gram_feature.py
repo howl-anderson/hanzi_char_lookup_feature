@@ -39,9 +39,9 @@ class GramFeature:
 class TokenGramFeature:
     def __init__(self, token, n_gram_feature=None):
         self.token = token
-        self.n_gram_feature = (
+        self.n_gram_feature: Dict[int, GramFeature] = (
             n_gram_feature if n_gram_feature is not None else {}
-        )  # type: Dict[int, GramFeature]
+        )
 
     def __str__(self):
         return "[{!s} | {!s}]".format(self.token, self.n_gram_feature)
