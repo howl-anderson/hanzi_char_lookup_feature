@@ -140,7 +140,8 @@ build_docker_nightly_build_server: dist
 
 .PHONY: run_docker_nightly_build_server
 run_docker_nightly_build_server:
-	docker run --rm -p 5000:5000 -v /home/howl/workshop/seq2annotation_keras_ner_on_ecarx/results/deliverable_model:/model ner_server
+	# FIXME
+	docker run --rm -p 5000:5000 -v some/path/to/deliverable_model:/model ner_server
 
 .PHONY: run_docker_nightly_build_trainer
 run_docker_nightly_build_trainer:
